@@ -1,8 +1,8 @@
 import { useQuery, gql } from '@apollo/client'
 
 const GET_FILTERED_CITIES = gql`
-  query Cities($filter: CitiesFilters) {
-    cities(filter: $filter) {
+  query Cities($filter: CitiesFilters, $limit: Int) {
+    cities(filter: $filter, limit: $limit) {
       cities {
         id
         name
@@ -23,10 +23,11 @@ interface FilterVariables {
   wishlist?: boolean
 }
 
-export const getFilteredCities = (filter: FilterVariables): any => {
+export const getFilteredCities = (filter: FilterVariables, limit: number): any => {
   const { error, loading, data } = useQuery(GET_FILTERED_CITIES, {
     variables: {
       filter,
+      limit,
     },
   })
 

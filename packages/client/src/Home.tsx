@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import type { FC } from 'react'
 import { Container, InputRightElement, Input, Heading, InputGroup, IconButton, VStack } from '@chakra-ui/react'
 import { Search2Icon } from '@chakra-ui/icons'
@@ -8,8 +8,16 @@ import { CitiesList } from './components/CitiesList'
 export const Home: FC = () => {
   const [queryValue, setQueryValue] = useState('')
 
-  const handleSearch = (value: string) => {
-    setQueryValue(value)
+  const searchInput: any = useRef()
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      setQueryValue(event.currentTarget.value)
+    }
+  }
+
+  const handleButtonClick = () => {
+    setQueryValue(searchInput.current.value)
   }
 
   return (
@@ -20,15 +28,19 @@ export const Home: FC = () => {
       <Container maxW="container.md">
         <InputGroup marginBottom="16px">
           <Input
-            onChange={e => handleSearch(e.target.value)}
-            value={queryValue}
-            maxlength="256"
+            ref={searchInput}
+            onKeyDown={e => handleKeyPress(e)}
+            defaultValue={queryValue}
+            maxLength={256}
             placeholder="Search for cities..."
             type="search"
             name="query"
             aria-label="Search"
           />
-          <InputRightElement children={<IconButton aria-label="" icon={<Search2Icon />} />} />
+          <InputRightElement
+            onClick={handleButtonClick}
+            children={<IconButton aria-label="" icon={<Search2Icon />} />}
+          />
         </InputGroup>
         <CitiesList queryValue={queryValue} queryType="name" />
       </Container>

@@ -22,12 +22,12 @@ interface ButtonProps {
   type: string
 }
 
-export const Button: FC<ButtonProps> = ({ isChecked, id, type }) => {
+export const PreferenceButton: FC<ButtonProps> = ({ isChecked, id, type }) => {
   const [updateCity] = useMutation(UPDATE_CITY, {
     refetchQueries: ['Cities'],
   })
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateCity({
       variables: {
         input: {
